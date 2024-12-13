@@ -6,47 +6,62 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 12:41:07 by ebansse           #+#    #+#             */
-/*   Updated: 2024/12/12 17:38:17 by ebansse          ###   ########.fr       */
+/*   Updated: 2024/12/13 17:15:12 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+#include <stdio.h>
 
-int	key_hook(int num, t_game *game)
+void    display_character(t_game *game)
 {
-	if (num == 65307)
+    mlx_clear_window(game->mlx_ptr, game->win_ptr);
+    mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->img_perso, game->x_perso, game->y_perso);
+}
+int	key_press(int keycode, t_game *game)
+{
+	if (keycode == 65307)
 	{
 		mlx_destroy_window(game->mlx_ptr, game->win_ptr);
-		exit(0);
+		exit(0);	
+	}	
+	else if (keycode == 65362)
+	{
+		game->y_perso += 10;
+		display_character(game);
+	}
+	else if (keycode == 65364)
+	{
+		game->y_perso -= 10;
+		display_character(game);
+	}
+	else if (keycode == 65361)
+	{
+		game->x_perso -= 10;
+		display_character(game);
+	}
+	else if (keycode == 65363)
+	{
+		game->y_perso += 10;
+		display_character(game);
 	}
 	return (0);
 }
 
-int close_window(t_game *game)
-{
-	mlx_destroy_window(game->mlx_ptr, game->win_ptr);
-	exit(0);
-	return (0);
-}
 
-int	window(t_game *game)
+int	main(void)
 {
-	game->mlx_ptr = mlx_init();
-	if (!game->mlx_ptr)
-		return (1);
-	game->win_ptr = mlx_new_window(game->mlx_ptr, 600, 400, "hi :)");
-	if (!game->win_ptr)
-		return (free(game->mlx_ptr), 1);
-	mlx_loop(game->mlx_ptr);
-	mlx_key_hook(game->win_ptr, key_hook, NULL);
-	mlx_hook(game->win_ptr, 17, 0, close_window, NULL);
-	return (0);
-}
+	t_game	game;
 
-int main()
-{
-	t_game game;
+	game.path_perso = "assets/persoo.xpm";
 
-	window(&game);
-	return (0);
+	game.mlx_ptr = mlx_init();
+	game.win_ptr = mlx_new_window(game.mlx_ptr, 1920, 1080, "coucou");
+	game.img_perso = mlx_xpm_file_to_image(game.mlx_ptr, game.path_perso, &game.width, &game.height);
+	
+	mlx_put_image_to_window(game.mlx_ptr, game.win_ptr, game.img_perso, 200, 200);
+	
+	mlx_key_hook(game.win_ptr, key_press, &game);
+	
+	mlx_loop(game.mlx_ptr);
 }
