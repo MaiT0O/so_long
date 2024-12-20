@@ -12,7 +12,7 @@
 
 INCLUDES = -I/usr/include -Imlx -Ilibft
 
-MLX_LD_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11 -lm -lz
+MLX_LD_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11 -lm -lz -Llibft -l:libft.a
 
 CFLAGS	= -Wall -Wextra -Werror -g
 
@@ -20,7 +20,7 @@ CC = gcc
 
 NAME = so_long
 
-SRCS = map.c
+SRCS = main.c hook.c map.c
 
 OBJS = ${SRCS:.c=.o}
 

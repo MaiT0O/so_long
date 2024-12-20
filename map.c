@@ -1,67 +1,114 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   map.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 12:41:07 by ebansse           #+#    #+#             */
-/*   Updated: 2024/12/13 17:15:12 by ebansse          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "so_long.h"
-#include <stdio.h>
 
-void    display_character(t_game *game)
+void	remplir_tableau(t_map *map, int fd)
 {
-    mlx_clear_window(game->mlx_ptr, game->win_ptr);
-    mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->img_perso, game->x_perso, game->y_perso);
-}
-int	key_press(int keycode, t_game *game)
-{
-	if (keycode == 65307)
+	char	*line;
+	int		i;
+
+	i = 0;
+	line = get_next_line(fd);
+	while (line != NULL)
 	{
-		mlx_destroy_window(game->mlx_ptr, game->win_ptr);
-		exit(0);	
-	}	
-	else if (keycode == 65362)
-	{
-		game->y_perso += 10;
-		display_character(game);
+		map.map[i] = line;
+		i++;
+		free(line);
+		line = get_next_line(fd);
 	}
-	else if (keycode == 65364)
-	{
-		game->y_perso -= 10;
-		display_character(game);
-	}
-	else if (keycode == 65361)
-	{
-		game->x_perso -= 10;
-		display_character(game);
-	}
-	else if (keycode == 65363)
-	{
-		game->y_perso += 10;
-		display_character(game);
-	}
-	return (0);
+	map.map[i] = NULL;
 }
 
-
-int	main(void)
+char	**tableau_map(t_map *map)
 {
-	t_game	game;
+	int		fd;
+	char	*line;
+	char	**mapp;
 
-	game.path_perso = "assets/persoo.xpm";
+	fd = open(map.path_map, O_RDONLY);
+	if (fd < 0)
+		return (NULL);
+	line = get_next_line(fd);
+	map.line_map = 0;
+	while (line != NULL)
+	{
+		map.line_map++;
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+	mapp = (char **)malloc((map.line_map + 1) * sizeof(char *));
+	if (!mapp)
+		return (NULL);
+	fd = open(map.path_map, O_RDONLY);
+	remplir_tableau(mapp, fd);
+	close(fd);
+	return (mapp);
+}
 
-	game.mlx_ptr = mlx_init();
-	game.win_ptr = mlx_new_window(game.mlx_ptr, 1920, 1080, "coucou");
-	game.img_perso = mlx_xpm_file_to_image(game.mlx_ptr, game.path_perso, &game.width, &game.height);
-	
-	mlx_put_image_to_window(game.mlx_ptr, game.win_ptr, game.img_perso, 200, 200);
-	
-	mlx_key_hook(game.win_ptr, key_press, &game);
-	
-	mlx_loop(game.mlx_ptr);
+int	wall_check(t_map *map)
+{
+	int	i;
+
+	i = -1;
+	if (ft_str_only_chr(map.map[0], '1') || ft_str_only_chr(map.map[-1], '1'))
+		return (0);
+	else
+	{
+		while (map.map[++i][0] == '1' && map.map[i][-1] == '1' && map.map[i] != NULL);
+		if (i + 1 == map->line_map)
+			return (1);
+		else
+			return (0);
+	}
+}
+
+void	letter_number_check(t_map *map, char c, int y, int x)
+{
+	if (c == 'P' && map.spawn < 1)
+	{
+		map.spawn = 1;
+		map->pos_P[0] = y;
+		map->pos_P[1] = x;
+	}
+	else if (c == 'P' && map.spawn >= 1)
+		map.spawn = 2;
+	else if (c == 'E' && map.exit < 1)
+	{
+		map.exit = 1;
+		map->pos_E[0] = y;
+		map->pos_E[1] = x;
+	}
+	else if (c == 'E' && map.exit >= 1)
+		map.exit = 2;
+	else if (c == 'C')
+		map.item++;
+	else if (c == '0' || c == '1')
+		map.valid = 0;
+	else
+		map.valid = 1;
+}
+
+int	rectangle_check(t_map *map)
+{
+	int		i;
+	int		j;
+	size_t	len;
+
+	i = -1;
+	j = 0;
+	map->cols = ft_strlen((const char *)map.map[0]);
+	if (map->line_map < 3)
+		return (0);
+	else if (map->line_map == map->cols)
+		return (0);
+	while (map.map[++j] != NULL)
+	{
+		len = ft_strlen((const char *)map.map[j]);
+		if (len != map.cols)
+			return (0);
+		while (map.map[j][++i] != NULL)
+		{
+			letter_number_check(map, map.map[j][i], j, i);
+		}
+	}
+	return (1);
 }
