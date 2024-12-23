@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/12 13:32:23 by ebansse           #+#    #+#             */
-/*   Updated: 2024/12/13 16:25:35 by ebansse          ###   ########.fr       */
+/*   Created: 2024/12/23 13:21:26 by ebansse           #+#    #+#             */
+/*   Updated: 2024/12/23 16:30:28 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,17 @@
 # include "mlx/mlx.h"
 # include "libft/libft.h"
 
-# ifndef ERROR_MSG
-#  define ERROR_MSG "Error : la map n'est pas conforme.\nPour rappel la map doit suivre précisement ces règles :\n\t "
-# endif
-
 typedef struct t_game
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	int		width;
-	int		heigth;
+	int		perso_width;
+	int		perso_heigth;
+	int		perso_x;
+	int		perso_y;
+	void	*perso_img;
+	char	*perso_path;
+	int		perso_pas;
 }	t_game;
 
 typedef struct t_map
@@ -42,27 +43,31 @@ typedef struct t_map
 	int		valid;
 	int		line_map;
 	size_t	cols;
-	int		pos_E[2];
-	int		pos_P[2];
+	int		pos_e[2];
+	int		pos_p[2];
 	int		check_wall;
 	int		check_item;
 	int		check_rectangle;
 }	t_map;
 
-typedef struct t_perso
-{
-	int		width;
-	int		heigth;
-	int		x;
-	int		y;
-	void	*img;
-	char	*path;
-}	t_perso;
-
 typedef struct t_img
 {
-	int		width;
-	int		heigth;
+	void	*wall_img;
+	char	*wall_path;
+	int		wall_width;
+	int		wall_heigth;
+	void	*floor_img;
+	char	*flor_path;
+	int		floor_width;
+	int		floor_heigth;
+	void	*mine_img;
+	char	*mine_path;
+	int		mine_width;
+	int		mine_heigth;
+	void	*exit_img;
+	char	*exit_path;
+	int		exit_width;
+	int		exit_heigth;
 }	t_img;
 
 void	display_character(t_game *game);
@@ -70,9 +75,13 @@ int		move(int keycode, t_game *game);
 int		key_press(int keycode, t_game *game);
 int		close_window(t_game *game);
 void	remplir_tableau(t_map *map, int fd);
-void	tableau_map(t_map *map);
+char	**tableau_map(t_map *map);
 int		wall_check(t_map *map);
-void	letter_number_check(t_map *map, char c);
+void	letter_number_check(t_map *map, char c, int y, int x);
 int		rectangle_check(t_map *map);
+void	flood_fill(t_map *map, int x, int y);
+int		exit_check(t_map *map);
+int		map_check(t_map *map);
+
 
 #endif

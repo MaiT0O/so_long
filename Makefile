@@ -6,7 +6,7 @@
 #    By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 13:27:10 by ebansse           #+#    #+#              #
-#    Updated: 2024/12/13 14:24:59 by ebansse          ###   ########.fr        #
+#    Updated: 2024/12/23 16:27:10 by ebansse          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CC = gcc
 
 NAME = so_long
 
-SRCS = main.c hook.c map.c
+SRCS = main.c hook.c map.c window.c
 
 OBJS = ${SRCS:.c=.o}
 

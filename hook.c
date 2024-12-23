@@ -1,30 +1,59 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hook.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/23 13:59:46 by ebansse           #+#    #+#             */
+/*   Updated: 2024/12/23 15:40:42 by ebansse          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
-void    display_character(t_game *game, t_perso *perso)
+void    display_character(t_game *game)
 {
+	game->perso_pas++;
     mlx_clear_window(game->mlx_ptr, game->win_ptr);
-    mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, perso->img, perso->x, perso->y);
+    mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->perso_img,
+	game->perso_x, game->perso_y);
+	ft_printf("%i\n", game->perso_pas);
+	
 }
 
-int	move(int keycode, t_perso *perso)
+int	move(int keycode, t_game *game)
 {
-	if (keycode == 122) 	// Z
-		perso->y -= 10;
-	else if (keycode == 115)// S
-		perso->y += 10;
+	game->perso_pas = 0;
+	
+	if (keycode == 122)	// Z
+	{
+		game->perso_y -= 10;
+		display_character(game);
+	}
+	else if (keycode == 115 )// S
+	{
+		game->perso_y += 10;
+		display_character(game);
+	}
 	else if (keycode == 113)// Q
-		perso->x -= 10;
+	{
+		game->perso_x-= 10;
+		display_character(game);
+	}
 	else if (keycode == 100)// D
-		perso->x += 10;
-	display_character(perso);
+	{
+		game->perso_x += 10;
+		display_character(game);
+	}
 	return (0);
 }
 
-int	key_press(int keycode, t_game *game, t_perso *perso)
+int	key_press(int keycode, t_game *game)
 {
 	if (keycode == 65307)
 		close_window(game);
-	move(keycode, perso);
+	move(keycode, game);
 	return (0);
 }
 
