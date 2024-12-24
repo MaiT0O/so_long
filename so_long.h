@@ -23,13 +23,15 @@ typedef struct t_game
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
+	int		win_width;
+	int		win_height;
 	int		perso_width;
 	int		perso_heigth;
 	int		perso_x;
 	int		perso_y;
 	void	*perso_img;
 	char	*perso_path;
-	int		perso_pas;
+	int		perso_step;
 }	t_game;
 
 typedef struct t_map
@@ -37,6 +39,8 @@ typedef struct t_map
 	char	*path_map;
 	char	**map;
 	char	**copy_map;
+	int		fd;
+	int		check;
 	int		spawn;
 	int		exit;
 	int		item;
@@ -74,7 +78,7 @@ void	display_character(t_game *game);
 int		move(int keycode, t_game *game);
 int		key_press(int keycode, t_game *game);
 int		close_window(t_game *game);
-void	remplir_tableau(t_map *map, int fd);
+char	**remplir_tableau(char **map, int fd);
 char	**tableau_map(t_map *map);
 int		wall_check(t_map *map);
 void	letter_number_check(t_map *map, char c, int y, int x);
@@ -82,6 +86,5 @@ int		rectangle_check(t_map *map);
 void	flood_fill(t_map *map, int x, int y);
 int		exit_check(t_map *map);
 int		map_check(t_map *map);
-
 
 #endif

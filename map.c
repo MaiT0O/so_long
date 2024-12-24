@@ -12,46 +12,45 @@
 
 #include "so_long.h"
 
-void	remplir_tableau(t_map *map, int fd)
+char	**remplir_tableau(char **map, int fd)
 {
 	char	*line;
 	int		i;
 
-	i = 0;
+	i = 0;n
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		map->map[i] = line;
+		map[i] = line;
 		i++;
 		free(line);
 		line = get_next_line(fd);
 	}
-	map->map[i] = NULL;
+	map[i] = NULL;
+	return (map);
 }
 
 char	**tableau_map(t_map *map)
 {
-	int		fd;
 	char	*line;
 	char	**mapp;
+	int		fd;
 
 	fd = open(map->path_map, O_RDONLY);
-	if (fd < 0)
-		return (NULL);
 	line = get_next_line(fd);
 	map->line_map = 0;
 	while (line != NULL)
 	{
 		map->line_map++;
 		free(line);
-		line = get_next_line(fd);
+		line = get_next_line(map->fd);
 	}
 	close(fd);
-	map->map = (char **)malloc((map->line_map + 1) * sizeof(char *));
-	if (!map->map)
+	mapp = (char **)malloc((map->line_map + 1) * sizeof(char *));
+	if (!mapp)
 		return (NULL);
 	fd = open(map->path_map, O_RDONLY);
-	remplir_tableau(map->map, fd);
+	mapp = remplir_tableau(mapp, fd);
 	close(fd);
 	return (mapp);
 }
@@ -103,7 +102,6 @@ int	rectangle_check(t_map *map)
 {
 	int		i;
 	int		j;
-	int		check;
 	size_t	len;
 
 	i = -1;
@@ -111,14 +109,14 @@ int	rectangle_check(t_map *map)
 	map->cols = ft_strlen((const char *)map->map[0]);
 	if (map->line_map < 3)
 		return (0);
-	else if (map->line_map == map->cols)
+	else if (map->line_map == (int)map->cols)
 		return (0);
 	while (map->map[++j] != NULL)
 	{
 		len = ft_strlen((const char *)map->map[j]);
 		if (len != map->cols)
 			return (0);
-		while (map->map[j][++i] != NULL)
+		while (map->map[j][++i] != 0)
 		{
 			letter_number_check(map, map->map[j][i], j, i);
 		}

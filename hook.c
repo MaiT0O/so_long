@@ -12,54 +12,65 @@
 
 #include "so_long.h"
 
-void    display_character(t_game *game)
+void	display_character(t_game *game)
 {
-	game->perso_pas++;
-    mlx_clear_window(game->mlx_ptr, game->win_ptr);
-    mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->perso_img,
-	game->perso_x, game->perso_y);
-	ft_printf("%i\n", game->perso_pas);
-	
+	if (!game || !game->mlx_ptr || !game->win_ptr || !game->perso_img)
+		return;
+
+	game->perso_step++;
+	mlx_clear_window(game->mlx_ptr, game->win_ptr);
+	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->perso_img,
+							game->perso_x, game->perso_y);
+	ft_printf("Steps: %i\n", game->perso_step);
 }
 
 int	move(int keycode, t_game *game)
 {
-	game->perso_pas = 0;
-	
-	if (keycode == 122)	// Z
+	if (!game)
+		return (0);
+
+	if ((keycode == 122 || keycode == 65362) && game->perso_y > 0) // Z (Haut)
 	{
 		game->perso_y -= 10;
 		display_character(game);
 	}
-	else if (keycode == 115 )// S
+	else if ((keycode == 115 || keycode == 65364) && game->perso_y < game->win_height - 10) // S (Bas)
 	{
 		game->perso_y += 10;
 		display_character(game);
 	}
-	else if (keycode == 113)// Q
+	else if ((keycode == 113 || keycode == 65361) && game->perso_x > 0) // Q (Gauche)
 	{
-		game->perso_x-= 10;
+		game->perso_x -= 10;
 		display_character(game);
 	}
-	else if (keycode == 100)// D
+	else if ((keycode == 100 || keycode == 65363) && game->perso_x < game->win_width - 10) // D (Droite)
 	{
 		game->perso_x += 10;
 		display_character(game);
 	}
-	return (0);
+	return (1);
 }
 
 int	key_press(int keycode, t_game *game)
 {
-	if (keycode == 65307)
+	if (!game)
+		return (0);
+
+	if (keycode == 65307) // Échappement
 		close_window(game);
-	move(keycode, game);
-	return (0);
+	else
+		move(keycode, game);
+	return (1);
 }
 
 int	close_window(t_game *game)
 {
-	mlx_destroy_window(game->mlx_ptr, game->win_ptr);
+	if (!game)
+		exit(0);
+
+	if (game->mlx_ptr && game->win_ptr)
+		mlx_destroy_window(game->mlx_ptr, game->win_ptr);
 	exit(0);
-	return (0);
+	return (1);
 }
