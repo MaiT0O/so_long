@@ -75,6 +75,7 @@ typedef struct t_img
 }	t_img;
 
 void	display_character(t_game *game);
+void 	display_2d_array(int rows, char	**array);
 int		move(int keycode, t_game *game);
 int		key_press(int keycode, t_game *game);
 int		close_window(t_game *game);

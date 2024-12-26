@@ -38,7 +38,6 @@ int	check_ber(t_map *map, char *str)
 	int	fd;
 
 	fd = open(str, O_RDONLY);
-	ft_printf("%d\n", fd);
 	if (fd < 0)
 		return (0);
 	else
@@ -62,14 +61,13 @@ int	main(int argc, char	**argv)
 	else
 	{
 		initialisation(&game);
-		if (!map_check(&map))
-			return (0);
-		game.win_ptr = mlx_new_window(game.mlx_ptr, game.win_width, game.win_height, "so_long");
+		map_check(&map);
+		/*game.win_ptr = mlx_new_window(game.mlx_ptr, game.win_width, game.win_height, "so_long");
 		mlx_put_image_to_window(game.mlx_ptr, game.win_ptr, game.perso_img, game.perso_x, game.perso_y);
 		map.path_map = argv[1];
 		mlx_key_hook(game.win_ptr, key_press, &game);
 		mlx_hook(game.win_ptr, 17, 0, close_window, &game);
-		mlx_loop(game.mlx_ptr);
+		mlx_loop(game.mlx_ptr);*/
 	}
 	return (1);
 }

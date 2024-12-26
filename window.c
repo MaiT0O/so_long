@@ -12,6 +12,18 @@
 
 #include "so_long.h"
 
+void display_2d_array(int rows, char	**array)
+{
+    int i;
+
+    i = 0;
+	while (i < rows)
+    {
+		ft_printf("%s", array[i]);
+		i++;
+    }
+}
+
 void	flood_fill(t_map *map, int x, int y)
 {
     // Vérifie si la position est hors des limites ou si ce n’est pas un chemin accessible
@@ -37,7 +49,7 @@ int	exit_check(t_map *map)
 	i = -1;
 	if (map->exit != 1 || map->spawn != 1)
 	{
-		ft_printf("La map doit contenir exactement une sortie et un point de spawn");
+		ft_printf("La map doit contenir exactement une sortie et un point de spawn\n");
 		return (0);
 	}
 	map->copy_map = tableau_map(map);
@@ -53,17 +65,6 @@ int	exit_check(t_map *map)
 	return (accessible);
 }
 
-void display_2d_array(int rows, char	**array)
-{
-    int i = 0;
-
-    while (i < rows)
-    {
-		ft_printf("%s\n", array[i]);
-		i++;
-    }
-}
-
 int	map_check(t_map *map)
 {
 	map->spawn = 0;
@@ -72,9 +73,10 @@ int	map_check(t_map *map)
 	map->valid = 0;
 
 	map->map = tableau_map(map);
-	if (!exit_check(map))
+	if (!map->map)
+		return (0);
+	else if (!rectangle_check(map))
 	{
-		ft_printf("exit\n");
 		return (0);
 	}
 	else if (map->spawn == 2 || map->exit == 2 || map->check_item == 0 || map->valid == 1)
@@ -82,15 +84,18 @@ int	map_check(t_map *map)
 		ft_printf("letter\n");
 		return (0);
 	}
-	else if (!wall_check(map))
+	ft_printf("%d\n", wall_check(map));
+	/*else if (!wall_check(map))
 	{
 		ft_printf("wall\n");
 		return (0);
-	}
-	else if (!rectangle_check(map))
+	}*/
+	if (!exit_check(map))
 	{
-		ft_printf("rectangle\n");
+		ft_printf("exit\n");
 		return (0);
 	}
+	else
+		ft_printf("Map is valid\n");
 	return (1);
 }
