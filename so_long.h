@@ -26,7 +26,7 @@ typedef struct t_game
 	int		win_width;
 	int		win_height;
 	int		perso_width;
-	int		perso_heigth;
+	int		perso_height;
 	int		perso_x;
 	int		perso_y;
 	void	*perso_img;
@@ -40,7 +40,6 @@ typedef struct t_map
 	char	**map;
 	char	**copy_map;
 	int		fd;
-	int		check;
 	int		spawn;
 	int		exit;
 	int		item;
@@ -49,43 +48,37 @@ typedef struct t_map
 	size_t	cols;
 	int		pos_e[2];
 	int		pos_p[2];
-	int		check_wall;
-	int		check_item;
-	int		check_rectangle;
 }	t_map;
 
 typedef struct t_img
 {
+	int		height;
+	int		width;
 	void	*wall_img;
-	char	*wall_path;
-	int		wall_width;
-	int		wall_heigth;
 	void	*floor_img;
-	char	*flor_path;
-	int		floor_width;
-	int		floor_heigth;
 	void	*mine_img;
-	char	*mine_path;
 	int		mine_width;
-	int		mine_heigth;
+	int		mine_height;
 	void	*exit_img;
-	char	*exit_path;
 	int		exit_width;
-	int		exit_heigth;
+	int		exit_height;
 }	t_img;
 
 void	display_character(t_game *game);
-void 	display_2d_array(int rows, char	**array);
+void 	display_2d_array(t_map *map, char	**array);
 int		move(int keycode, t_game *game);
 int		key_press(int keycode, t_game *game);
 int		close_window(t_game *game);
 char	**remplir_tableau(char **map, int fd);
 char	**tableau_map(t_map *map);
 int		wall_check(t_map *map);
-void	letter_number_check(t_map *map, char c, int y, int x);
+void	letter_number_check(t_map *map, int i, int j);
 int		rectangle_check(t_map *map);
 void	flood_fill(t_map *map, int x, int y);
 int		exit_check(t_map *map);
 int		map_check(t_map *map);
+void	display_map(t_game *game, t_map *map, t_img *img);
+void	clean_map(t_map *map);
+void	display_map2(t_game *game, t_map *map, t_img *img);
 
 #endif

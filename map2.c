@@ -12,19 +12,19 @@
 
 #include "so_long.h"
 
-void display_2d_array(int rows, char	**array)
+void display_2d_array(t_map *map, char	**array)
 {
     int i;
 
     i = 0;
-	while (i < rows)
+	while (i < map->line_map)
     {
 		ft_printf("%s", array[i]);
 		i++;
     }
 }
 
-void	flood_fill(t_map *map, int x, int y)
+void	flood_fill(t_map *map, int y, int x)
 {
     // Vérifie si la position est hors des limites ou si ce n’est pas un chemin accessible
     if (y < 0 || y >= map->line_map || x < 0 || x >= (int)map->cols || 
@@ -48,54 +48,41 @@ int	exit_check(t_map *map)
 
 	i = -1;
 	if (map->exit != 1 || map->spawn != 1)
-	{
-		ft_printf("La map doit contenir exactement une sortie et un point de spawn\n");
 		return (0);
-	}
 	map->copy_map = tableau_map(map);
-	flood_fill(map, map->pos_p[1], map->pos_p[0]);
-	accessible = (map->copy_map[map->pos_e[1]][map->pos_e[0]] == 'F');
-
-	while (++i < map->line_map)
+	if (map->copy_map != NULL)
 	{
-		free(map->copy_map[i]);
+		flood_fill(map, map->pos_p[0], map->pos_p[1]);
+		if (map->pos_e[1] < (int)map->cols && map->pos_e[0] < map->line_map)
+			accessible = (map->copy_map[map->pos_e[0]][map->pos_e[1]] == 'F');
+		else
+			accessible = 0; // Si les indices sont hors limites, considérez comme non accessible
+		i = -1;
+		while (++i < map->line_map)
+		{
+			free(map->copy_map[i]);
+		}
+		free(map->copy_map);
+		map->copy_map = NULL; // Évitez les doubles free
 	}
-
-	free(map->copy_map);
+	else
+		accessible = 0; // Si copy_map est NULL, considérez comme non accessible
 	return (accessible);
 }
 
 int	map_check(t_map *map)
 {
-	map->spawn = 0;
-	map->exit = 0;
-	map->item = 0;
-	map->valid = 0;
-
-	map->map = tableau_map(map);
+	letter_number_check(map, 0, 0);
 	if (!map->map)
 		return (0);
-	else if (!rectangle_check(map))
-	{
-		return (0);
-	}
-	else if (map->spawn == 2 || map->exit == 2 || map->check_item == 0 || map->valid == 1)
-	{
-		ft_printf("letter\n");
-		return (0);
-	}
-	ft_printf("%d\n", wall_check(map));
-	/*else if (!wall_check(map))
-	{
-		ft_printf("wall\n");
-		return (0);
-	}*/
-	if (!exit_check(map))
-	{
-		ft_printf("exit\n");
-		return (0);
-	}
+	else if (!rectangle_check(map) || map->spawn == 2 || map->exit == 2 
+	|| map->item == 0 || map->valid == 1 || !wall_check(map) 
+	|| !exit_check(map))
+		ft_printf("La map doit respecter les regles de l'énoncé\n");
 	else
+	{
 		ft_printf("Map is valid\n");
-	return (1);
+		return (1);
+	}
+	return (0);
 }

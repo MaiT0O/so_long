@@ -74,3 +74,28 @@ int	close_window(t_game *game)
 	exit(0);
 	return (1);
 }
+
+void	clean_map(t_map *map)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	if (map->map)
+	{
+		while (i < map->line_map)
+		{
+			j = 0;
+			while (j < (int)map->cols)
+			{
+				if (map->map[i][j] == '\n')
+				{
+					map->map[i][j] = '\0';
+					break;
+				}
+				j++;
+			}
+			i++;
+		}
+	}
+}

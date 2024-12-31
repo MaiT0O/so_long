@@ -20,7 +20,7 @@ CC = gcc
 
 NAME = so_long
 
-SRCS = main.c hook.c map.c window.c
+SRCS = main.c hook.c map.c map2.c display.c
 
 OBJS = ${SRCS:.c=.o}
 
