@@ -14,13 +14,13 @@ INCLUDES = -I/usr/include -Imlx -Ilibft
 
 MLX_LD_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11 -lm -lz -Llibft -l:libft.a
 
-CFLAGS	= -Wall -Wextra -Werror -g
+CFLAGS	= -Wall -Wextra -Werror
 
-CC = gcc
+CC = gcc -g
 
 NAME = so_long
 
-SRCS = main.c hook.c map.c map2.c display.c
+SRCS = main.c hook.c map.c map2.c render_move.c
 
 OBJS = ${SRCS:.c=.o}
 

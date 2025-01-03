@@ -12,56 +12,66 @@
 
 #include "so_long.h"
 
-void	display_character(t_game *game)
+void	display_map(t_game *game, t_map *map, t_img *img)
 {
-	if (!game || !game->mlx_ptr || !game->win_ptr || !game->perso_img)
-		return;
+    int	i;
+    int	j;
 
-	game->perso_step++;
-	mlx_clear_window(game->mlx_ptr, game->win_ptr);
-	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->perso_img,
-							game->perso_x, game->perso_y);
-	ft_printf("Steps: %i\n", game->perso_step);
+    i = 0;
+    while (i < map->line_map)
+    {
+        j = 0;
+        while (j < (int)map->cols)
+        {
+            mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img->floor_img, j * img->width, i * img->height);
+            // Dessiner les autres éléments par-dessus
+            if (map->map[i][j] == '1')
+                mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img->wall_img, j * img->width, i * img->height);
+            else if (map->map[i][j] == 'E')
+                mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img->exit_img, j * img->width, i * img->height);
+            else if (map->map[i][j] == 'C')
+                mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img->mine_img, j * img->width, i * img->height);
+            j++;
+        }
+        i++;
+    }
+	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->perso_img, game->perso_x, game->perso_y);
 }
 
-int	move(int keycode, t_game *game)
+void	display_character(t_data *data)
 {
-	if (!game)
-		return (0);
-
-	if ((keycode == 122 || keycode == 65362) && game->perso_y > 0) // Z (Haut)
-	{
-		game->perso_y -= 10;
-		display_character(game);
-	}
-	else if ((keycode == 115 || keycode == 65364) && game->perso_y < game->win_height - 10) // S (Bas)
-	{
-		game->perso_y += 10;
-		display_character(game);
-	}
-	else if ((keycode == 113 || keycode == 65361) && game->perso_x > 0) // Q (Gauche)
-	{
-		game->perso_x -= 10;
-		display_character(game);
-	}
-	else if ((keycode == 100 || keycode == 65363) && game->perso_x < game->win_width - 10) // D (Droite)
-	{
-		game->perso_x += 10;
-		display_character(game);
-	}
-	return (1);
+	mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, data->img->floor_img, data->game->perso_x, data->game->perso_y);
+	data->game->perso_step++;
+	mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, data->game->perso_img, data->game->perso_x, data->game->perso_y);
+	ft_printf("Steps: %i\n", data->game->perso_step);
 }
 
-int	key_press(int keycode, t_game *game)
+int	move(int keycode, t_data *data)
 {
-	if (!game)
-		return (0);
+    if (!data || !data->game)
+        return (0);
 
-	if (keycode == 65307) // Échappement
-		close_window(game);
-	else
-		move(keycode, game);
-	return (1);
+    else if ((keycode == 122 || keycode == 65362)) // Z (Haut)
+    {
+        render_top(data);
+		display_character(data);
+    }
+    else if ((keycode == 115 || keycode == 65364)) // S (Bas)
+    {
+        render_bottom(data);
+		display_character(data);
+    }
+    else if ((keycode == 113 || keycode == 65361)) // Q (Gauche)
+    {
+        render_left(data);
+		display_character(data);
+    }
+    else if ((keycode == 100 || keycode == 65363)) // D (Droite)
+    {
+        render_right(data);
+		display_character(data);
+    }
+    return (1);
 }
 
 int	close_window(t_game *game)
@@ -70,32 +80,23 @@ int	close_window(t_game *game)
 		exit(0);
 
 	if (game->mlx_ptr && game->win_ptr)
+	{
 		mlx_destroy_window(game->mlx_ptr, game->win_ptr);
+		mlx_destroy_display(game->mlx_ptr);
+		free(game->mlx_ptr);
+	}
 	exit(0);
 	return (1);
 }
-
-void	clean_map(t_map *map)
+int	key_press(int keycode, t_data *data)
 {
-	int	i;
-	int	j;
+    if (!data)
+        return (0);
 
-	i = 0;
-	if (map->map)
-	{
-		while (i < map->line_map)
-		{
-			j = 0;
-			while (j < (int)map->cols)
-			{
-				if (map->map[i][j] == '\n')
-				{
-					map->map[i][j] = '\0';
-					break;
-				}
-				j++;
-			}
-			i++;
-		}
-	}
+    if (keycode == 65307) // Échappement
+        close_window(data->game);
+    else
+        move(keycode, data);
+    return (1);
 }
+

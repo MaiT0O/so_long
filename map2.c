@@ -12,6 +12,31 @@
 
 #include "so_long.h"
 
+void	finish(t_data *data)
+{
+	int		i;
+
+	i = 0;
+	if (data->map->map != NULL)
+	{
+		while (data->map->map[i] != NULL)
+		{
+			free(data->map->map[i]);
+			i++;
+		}
+		free(data->map->map);
+		mlx_destroy_image(data->game->mlx_ptr, data->img->wall_img);
+		mlx_destroy_image(data->game->mlx_ptr, data->img->floor_img);
+		mlx_destroy_image(data->game->mlx_ptr, data->img->mine_img);
+		mlx_destroy_image(data->game->mlx_ptr, data->img->off_mine_img);
+		mlx_destroy_image(data->game->mlx_ptr, data->img->exit_img);
+		mlx_destroy_image(data->game->mlx_ptr, data->game->perso_img);
+	}
+	mlx_destroy_display(data->game->mlx_ptr);
+	free(data->game->mlx_ptr);
+	exit(0);
+}
+
 void display_2d_array(t_map *map, char	**array)
 {
     int i;
@@ -70,7 +95,7 @@ int	exit_check(t_map *map)
 	return (accessible);
 }
 
-int	map_check(t_map *map)
+int	map_check(t_map *map, t_game *game, t_img *img)
 {
 	letter_number_check(map, 0, 0);
 	if (!map->map)
@@ -82,6 +107,8 @@ int	map_check(t_map *map)
 	else
 	{
 		ft_printf("Map is valid\n");
+		game->perso_x = map->pos_p[1] * img->width;
+		game->perso_y = map->pos_p[0] * img->height;
 		return (1);
 	}
 	return (0);
