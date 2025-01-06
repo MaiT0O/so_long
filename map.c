@@ -6,7 +6,7 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:09:44 by ebansse           #+#    #+#             */
-/*   Updated: 2024/12/23 16:44:53 by ebansse          ###   ########.fr       */
+/*   Updated: 2025/01/06 16:32:27 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	wall_check(t_map *map)
     while (i < map->line_map)
     {
         if (map->map[i][0] != '1' || map->map[i][col] != '1')
-            return (0);
+        	return (0);
         i++;
     }
     return (1);
@@ -100,7 +100,7 @@ void	letter_number_check(t_map *map, int i, int j)
 			else if (map->map[i][j] == 'C')
 				map->item++;
 			else if (map->map[i][j] != '1' && map->map[i][j] != '0')
-				map->valid = 1;
+				map->valid = 0;
 			j++;
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 13:59:46 by ebansse           #+#    #+#             */
-/*   Updated: 2024/12/23 15:40:42 by ebansse          ###   ########.fr       */
+/*   Updated: 2025/01/06 15:27:09 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,15 @@ void	display_map(t_game *game, t_map *map, t_img *img)
         }
         i++;
     }
-	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->perso_img, game->perso_x, game->perso_y);
+	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->perso_img, game->perso_x + game->marge_x, game->perso_y + game->marge_y);
 }
 
 void	display_character(t_data *data)
 {
-	mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, data->img->floor_img, data->game->perso_x, data->game->perso_y);
-	data->game->perso_step++;
-	mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, data->game->perso_img, data->game->perso_x, data->game->perso_y);
+    mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, 
+		data->img->floor_img, data->game->perso_x, data->game->perso_y);
+	mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, 
+        data->game->perso_img, data->game->perso_x + data->game->marge_x, data->game->perso_y + data->game->marge_y);
 	ft_printf("Steps: %i\n", data->game->perso_step);
 }
 
@@ -54,47 +55,33 @@ int	move(int keycode, t_data *data)
     else if ((keycode == 122 || keycode == 65362)) // Z (Haut)
     {
         render_top(data);
-		display_character(data);
+        display_character(data);
     }
     else if ((keycode == 115 || keycode == 65364)) // S (Bas)
     {
         render_bottom(data);
-		display_character(data);
+        display_character(data);
     }
     else if ((keycode == 113 || keycode == 65361)) // Q (Gauche)
     {
         render_left(data);
-		display_character(data);
+        display_character(data);
     }
     else if ((keycode == 100 || keycode == 65363)) // D (Droite)
     {
         render_right(data);
-		display_character(data);
+        display_character(data);
     }
     return (1);
 }
 
-int	close_window(t_game *game)
-{
-	if (!game)
-		exit(0);
-
-	if (game->mlx_ptr && game->win_ptr)
-	{
-		mlx_destroy_window(game->mlx_ptr, game->win_ptr);
-		mlx_destroy_display(game->mlx_ptr);
-		free(game->mlx_ptr);
-	}
-	exit(0);
-	return (1);
-}
 int	key_press(int keycode, t_data *data)
 {
     if (!data)
         return (0);
 
     if (keycode == 65307) // Échappement
-        close_window(data->game);
+        finish(data);
     else
         move(keycode, data);
     return (1);

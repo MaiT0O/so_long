@@ -6,7 +6,7 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 13:21:26 by ebansse           #+#    #+#             */
-/*   Updated: 2024/12/23 16:30:28 by ebansse          ###   ########.fr       */
+/*   Updated: 2025/01/06 15:24:05 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ typedef struct t_game
 	int		perso_step;
 	int		perso_x;
 	int		perso_y;
+	int		marge_x;
+	int		marge_y;
 	int		collect;
 }	t_game;
 
@@ -83,7 +85,6 @@ void	display_character(t_data *data);
 void	display_2d_array(t_map *map, char	**array);
 int		move(int keycode, t_data *data);
 int		key_press(int keycode, t_data *data);
-int		close_window(t_game *game);
 char	**remplir_tableau(char **map, int fd);
 char	**tableau_map(t_map *map);
 int		wall_check(t_map *map);
@@ -98,6 +99,6 @@ void	render_top(t_data *data);
 void	render_bottom(t_data *data);
 void	render_left(t_data *data);
 void	render_right(t_data *data);
-void	finish(t_data *data);
+int		finish(t_data *data);
 
 #endif

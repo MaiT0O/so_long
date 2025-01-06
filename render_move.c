@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render_move.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/06 12:00:00 by ebansse           #+#    #+#             */
+/*   Updated: 2025/01/06 14:23:40 by ebansse          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 int	chk_item(t_data *data, char c)
@@ -14,15 +26,15 @@ int	chk_item(t_data *data, char c)
 
 void	render_top(t_data *data)
 {
-	char	map_case;
+	char	next_case;
 
 	data->pos_x = data->game->perso_x / data->img->width;
 	data->pos_y = (data->game->perso_y / data->img->height) - 1;
-	map_case = data->map->map[data->pos_y][data->pos_x];
-	ft_printf("map_case: %c\n", map_case);
-	if (map_case != '1' && !chk_item(data, map_case))
+	next_case = data->map->map[data->pos_y][data->pos_x];
+	ft_printf("next_case: %c\n", next_case);
+	if (next_case != '1' && !chk_item(data, next_case))
 	{
-		if (map_case == 'E')
+		if (next_case == 'E')
 		{
 			if (data->map->item == 0)
 			{
@@ -31,22 +43,27 @@ void	render_top(t_data *data)
 				return ;
 			}
 		}
-		mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, data->img->floor_img, data->game->perso_x, data->game->perso_y);
-		data->game->perso_y -= data->img->height;
+		else
+		{
+			data->game->perso_step++;
+			mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, 
+				data->img->floor_img, data->game->perso_x, data->game->perso_y);
+			data->game->perso_y -= data->img->height;
+		}
 	}
 }
 
 void	render_bottom(t_data *data)
 {
-	char	map_case;
+	char	next_case;
 
 	data->pos_x = data->game->perso_x / data->img->width;
 	data->pos_y = (data->game->perso_y / data->img->height) + 1;
-	map_case = data->map->map[data->pos_y][data->pos_x];
-	ft_printf("map_case: %c\n", map_case);
-	if (map_case != '1' && !chk_item(data, map_case))
+	next_case = data->map->map[data->pos_y][data->pos_x];
+	ft_printf("next_case: %c\n", next_case);
+	if (next_case != '1' && !chk_item(data, next_case))
 	{
-		if (map_case == 'E')
+		if (next_case == 'E')
 		{
 			if (data->map->item == 0)
 			{
@@ -55,22 +72,27 @@ void	render_bottom(t_data *data)
 				return ;
 			}
 		}
-		mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, data->img->floor_img, data->game->perso_x, data->game->perso_y);
-		data->game->perso_y += data->img->height;
+		else
+		{
+			data->game->perso_step++;
+			mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, 
+				data->img->floor_img, data->game->perso_x, data->game->perso_y);
+			data->game->perso_y += data->img->height;
+		}
 	}	
 }
 
 void	render_left(t_data *data)
 {
-	char	map_case;
+	char	next_case;
 
 	data->pos_x = (data->game->perso_x / data->img->width) - 1;
 	data->pos_y = data->game->perso_y / data->img->height;
-	map_case = data->map->map[data->pos_y][data->pos_x];
-	ft_printf("map_case: %c\n", map_case);
-	if (map_case != '1' && !chk_item(data, map_case))
+	next_case = data->map->map[data->pos_y][data->pos_x];
+	ft_printf("next_case: %c\n", next_case);
+	if (next_case != '1' && !chk_item(data, next_case))
 	{
-		if (map_case == 'E')
+		if (next_case == 'E')
 		{
 			if (data->map->item == 0)
 			{
@@ -79,22 +101,27 @@ void	render_left(t_data *data)
 				return ;
 			}
 		}
-		mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, data->img->floor_img, data->game->perso_x, data->game->perso_y);
-		data->game->perso_x -= data->img->width;
+		else
+		{
+			data->game->perso_step++;
+			mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, 
+				data->img->floor_img, data->game->perso_x, data->game->perso_y);
+			data->game->perso_x -= data->img->width;
+		}
 	}
 }
 
 void	render_right(t_data *data)
 {
-	char	map_case;
+	char	next_case;
 
 	data->pos_x = (data->game->perso_x / data->img->width) + 1;
 	data->pos_y = data->game->perso_y / data->img->height;
-	map_case = data->map->map[data->pos_y][data->pos_x];
-	ft_printf("map_case: %c\n", map_case);
-	if (map_case != '1' && !chk_item(data, map_case))
+	next_case = data->map->map[data->pos_y][data->pos_x];
+	ft_printf("next_case: %c\n", next_case);
+	if (next_case != '1' && !chk_item(data, next_case))
 	{
-		if (map_case == 'E')
+		if (next_case == 'E')
 		{
 			if (data->map->item == 0)
 			{
@@ -103,7 +130,12 @@ void	render_right(t_data *data)
 				return ;
 			}
 		}
-		mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, data->img->floor_img, data->game->perso_x, data->game->perso_y);
-		data->game->perso_x += data->img->width;
+		else
+		{
+			data->game->perso_step++;
+			mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, 
+				data->img->floor_img, data->game->perso_x, data->game->perso_y);
+			data->game->perso_x += data->img->width;
+		}
 	}
 }
