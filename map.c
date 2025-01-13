@@ -6,7 +6,7 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:09:44 by ebansse           #+#    #+#             */
-/*   Updated: 2025/01/06 16:32:27 by ebansse          ###   ########.fr       */
+/*   Updated: 2025/01/13 17:54:06 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,35 +55,30 @@ char	**tableau_map(t_map *map)
 
 int	wall_check(t_map *map)
 {
-    int		i;
+	int		i;
 	size_t	col;
 
 	col = map->cols - 2;
-    // Vérifie si la première ligne ne contient que des '1'
-    if (!ft_str_only_chr(map->map[0], '1'))
-        return (0);
-
-    // Vérifie si la dernière ligne ne contient que des '1'
-    if (!ft_str_only_chr(map->map[map->line_map - 1], '1'))
-        return (0);
-
-    // Vérifie si la première et la dernière colonne ne contiennent que des '1'
-    i = 0;
-    while (i < map->line_map)
-    {
-        if (map->map[i][0] != '1' || map->map[i][col] != '1')
-        	return (0);
-        i++;
-    }
-    return (1);
+	if (!ft_str_only_chr(map->map[0], '1'))
+		return (0);
+	else if (!ft_str_only_chr(map->map[map->line_map - 1], '1'))
+		return (0);
+	i = 0;
+	while (i < map->line_map)
+	{
+		if (map->map[i][0] != '1' || map->map[i][col] != '1')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 void	letter_number_check(t_map *map, int i, int j)
 {
 	while (i < map->line_map && map->map[i] != NULL)
-    {
+	{
 		j = 0;
-		while (j < (int)map->cols && map->map[i][j] != '\n' && map->map[i][j] != '\0')
+		while (j < (int)map->cols - 2)
 		{
 			if (map->map[i][j] == 'P')
 			{
@@ -104,7 +99,7 @@ void	letter_number_check(t_map *map, int i, int j)
 			j++;
 		}
 		i++;
-    }
+	}
 }
 
 int	rectangle_check(t_map *map)

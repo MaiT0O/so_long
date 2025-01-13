@@ -1,7 +1,7 @@
 /* XPM */
 static char * persoo_xpm[] = {
 "78 87 10 1",
-" 	c #",
+" 	c None",
 ".	c #161C2E",
 "+	c #775396",
 "@	c #A8719A",

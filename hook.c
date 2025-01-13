@@ -6,84 +6,98 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 13:59:46 by ebansse           #+#    #+#             */
-/*   Updated: 2025/01/06 15:27:09 by ebansse          ###   ########.fr       */
+/*   Updated: 2025/01/13 17:34:31 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	display_map(t_game *game, t_map *map, t_img *img)
+void	put_floor(t_data *data)
 {
-    int	i;
-    int	j;
-
-    i = 0;
-    while (i < map->line_map)
-    {
-        j = 0;
-        while (j < (int)map->cols)
-        {
-            mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img->floor_img, j * img->width, i * img->height);
-            // Dessiner les autres éléments par-dessus
-            if (map->map[i][j] == '1')
-                mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img->wall_img, j * img->width, i * img->height);
-            else if (map->map[i][j] == 'E')
-                mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img->exit_img, j * img->width, i * img->height);
-            else if (map->map[i][j] == 'C')
-                mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img->mine_img, j * img->width, i * img->height);
-            j++;
-        }
-        i++;
-    }
-	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->perso_img, game->perso_x + game->marge_x, game->perso_y + game->marge_y);
+	data->game->perso_step++;
+	put_image(data->map->img_map, data->map->sprites_array[1],
+		data->game->perso_x, data->game->perso_y);
 }
 
-void	display_character(t_data *data)
+void	display_item(t_map *map, int x, int y, char c)
 {
-    mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, 
-		data->img->floor_img, data->game->perso_x, data->game->perso_y);
-	mlx_put_image_to_window(data->game->mlx_ptr, data->game->win_ptr, 
-        data->game->perso_img, data->game->perso_x + data->game->marge_x, data->game->perso_y + data->game->marge_y);
-	ft_printf("Steps: %i\n", data->game->perso_step);
+	if (c == 'E')
+	{
+		put_image(map->img_map, map->sprites_array[1], x, y);
+		put_image(map->img_map, map->sprites_array[0], x, y);
+	}
+	else if (c == 'C')
+	{
+		put_image(map->img_map, map->sprites_array[1], x, y);
+		put_image(map->img_map, map->sprites_array[2], x, y);
+	}
+	else if (c == '0')
+	{
+		put_image(map->img_map, map->sprites_array[1], x, y);
+	}
+	else if (c == '1')
+	{
+		put_image(map->img_map, map->sprites_array[5], x, y);
+	}
+}
+
+void	display_map(t_game *game, t_map *map)
+{
+	put_image(map->img_map, map->sprites_array[4],
+		game->perso_x + game->marge_x, game->perso_y + game->marge_y);
+	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr,
+		map->img_map->img, 0, 0);
+}
+
+void	create_map(t_game *game, t_map *map)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < map->line_map)
+	{
+		j = 0;
+		while (j < (int)map->cols)
+		{
+			if (map->map[i][j] == '0' || map->map[i][j] == 'P')
+				display_item(map, j * game->width, i * game->height, '0');
+			else if (map->map[i][j] == '1')
+				display_item(map, j * game->width, i * game->height, '1');
+			else if (map->map[i][j] == 'E')
+				display_item(map, j * game->width, i * game->height, 'E');
+			else if (map->map[i][j] == 'C')
+				display_item(map, j * game->width, i * game->height, 'C');
+			j++;
+		}
+		i++;
+	}
+	display_map(game, map);
 }
 
 int	move(int keycode, t_data *data)
 {
-    if (!data || !data->game)
-        return (0);
-
-    else if ((keycode == 122 || keycode == 65362)) // Z (Haut)
-    {
-        render_top(data);
-        display_character(data);
-    }
-    else if ((keycode == 115 || keycode == 65364)) // S (Bas)
-    {
-        render_bottom(data);
-        display_character(data);
-    }
-    else if ((keycode == 113 || keycode == 65361)) // Q (Gauche)
-    {
-        render_left(data);
-        display_character(data);
-    }
-    else if ((keycode == 100 || keycode == 65363)) // D (Droite)
-    {
-        render_right(data);
-        display_character(data);
-    }
-    return (1);
+	if (!data || !data->game)
+		return (0);
+	else if ((keycode == 122 || keycode == 65362))
+	{
+		render_top(data);
+		ft_printf("Steps: %i\n", data->game->perso_step);
+	}
+	else if ((keycode == 115 || keycode == 65364))
+	{
+		render_bottom(data);
+		ft_printf("Steps: %i\n", data->game->perso_step);
+	}
+	else if ((keycode == 113 || keycode == 65361))
+	{
+		render_left(data);
+		ft_printf("Steps: %i\n", data->game->perso_step);
+	}
+	else if ((keycode == 100 || keycode == 65363))
+	{
+		render_right(data);
+		ft_printf("Steps: %i\n", data->game->perso_step);
+	}
+	return (1);
 }
-
-int	key_press(int keycode, t_data *data)
-{
-    if (!data)
-        return (0);
-
-    if (keycode == 65307) // Échappement
-        finish(data);
-    else
-        move(keycode, data);
-    return (1);
-}
-

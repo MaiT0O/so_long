@@ -6,7 +6,7 @@
 #    By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/12 13:27:10 by ebansse           #+#    #+#              #
-#    Updated: 2024/12/23 16:27:10 by ebansse          ###   ########.fr        #
+#    Updated: 2025/01/13 15:35:06 by ebansse          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,22 +20,30 @@ CC = gcc -g
 
 NAME = so_long
 
-SRCS = main.c hook.c map.c map2.c render_move.c
+SRCS = main.c hook.c map.c map2.c render_move.c img_utils.c img_utils2.c
 
 OBJS = ${SRCS:.c=.o}
+
+all : ${NAME}
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -O3 -c $< -o $@
 
-$(NAME): $(OBJS)
+$(NAME): make_libs $(OBJS)
 	$(CC) $(OBJS) $(CFLAGS) $(MLX_LD_FLAGS) -o $(NAME)
 
-all : ${NAME}
+make_libs:
+	make -C mlx
+	make -C libft
 
 clean :
+	make -C mlx clean
+	make -C libft clean
 	rm -f ${OBJS}
 
 fclean : clean
+	make -C mlx clean
+	make -C libft fclean
 	rm -f ${NAME}
 
 re : fclean all
