@@ -6,7 +6,7 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 12:41:07 by ebansse           #+#    #+#             */
-/*   Updated: 2025/01/14 16:44:36 by ebansse          ###   ########.fr       */
+/*   Updated: 2025/01/14 17:06:35 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,12 @@ int	key_press(int keycode, t_data *data)
 int	check_ber(t_map *map, char *str)
 {
 	int	fd;
+	int	len;
 
 	fd = open(str, O_RDONLY);
-	if (fd < 0)
+	len = ft_strlen((const char *)str);
+	if (fd < 0 || str[len - 1] != 'r' || str[len - 2] != 'e'
+		|| str[len - 3] != 'b' || str[len - 4] != '.')
 		return (0);
 	else
 	{
@@ -76,7 +79,7 @@ int	main(int argc, char	**argv)
 
 	if (argc != 2 || !check_ber(&map, argv[1]))
 	{
-		ft_printf("Veuillez renseignez une map existante ;)\n");
+		ft_printf("Veuillez renseignez une map existante en .ber ;)\n");
 		return (0);
 	}
 	else

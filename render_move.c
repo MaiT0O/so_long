@@ -6,7 +6,7 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:00:00 by ebansse           #+#    #+#             */
-/*   Updated: 2025/01/13 18:33:23 by ebansse          ###   ########.fr       */
+/*   Updated: 2025/01/14 17:23:44 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,12 @@ int	chk_item(t_data *data, char c)
 
 void	render_top(t_data *data)
 {
-	char	next_case;
-
 	data->pos_x = data->game->perso_x / data->game->width;
 	data->pos_y = (data->game->perso_y / data->game->height) - 1;
-	next_case = data->map->map[data->pos_y][data->pos_x];
-	if (next_case != '1' && !chk_item(data, next_case))
+	data->next_case = data->map->map[data->pos_y][data->pos_x];
+	if (data->next_case != '1' && !chk_item(data, data->next_case))
 	{
-		if (next_case == 'E')
+		if (data->next_case == 'E')
 		{
 			if (data->map->item == 0)
 			{
@@ -61,18 +59,19 @@ void	render_top(t_data *data)
 			display_map(data->game, data->map);
 		}
 	}
+	else
+		data->game->print_step = 0;
 }
 
 void	render_bottom(t_data *data)
 {
-	char	next_case;
-
 	data->pos_x = data->game->perso_x / data->game->width;
 	data->pos_y = (data->game->perso_y / data->game->height) + 1;
-	next_case = data->map->map[data->pos_y][data->pos_x];
-	if (next_case != '1' && !chk_item(data, next_case))
+	data->next_case = data->map->map[data->pos_y][data->pos_x];
+	if (data->next_case != '1' && !chk_item(data, data->next_case))
 	{
-		if (next_case == 'E')
+		data->game->print_step = 0;
+		if (data->next_case == 'E')
 		{
 			if (data->map->item == 0)
 			{
@@ -89,18 +88,19 @@ void	render_bottom(t_data *data)
 			display_map(data->game, data->map);
 		}
 	}
+	else
+		data->game->print_step = 0;
 }
 
 void	render_left(t_data *data)
 {
-	char	next_case;
-
 	data->pos_x = (data->game->perso_x / data->game->width) - 1;
 	data->pos_y = data->game->perso_y / data->game->height;
-	next_case = data->map->map[data->pos_y][data->pos_x];
-	if (next_case != '1' && !chk_item(data, next_case))
+	data->next_case = data->map->map[data->pos_y][data->pos_x];
+	if (data->next_case != '1' && !chk_item(data, data->next_case))
 	{
-		if (next_case == 'E')
+		data->game->print_step = 0;
+		if (data->next_case == 'E')
 		{
 			if (data->map->item == 0)
 			{
@@ -117,18 +117,19 @@ void	render_left(t_data *data)
 			display_map(data->game, data->map);
 		}
 	}
+	else
+		data->game->print_step = 0;
 }
 
 void	render_right(t_data *data)
 {
-	char	next_case;
-
 	data->pos_x = (data->game->perso_x / data->game->width) + 1;
 	data->pos_y = data->game->perso_y / data->game->height;
-	next_case = data->map->map[data->pos_y][data->pos_x];
-	if (next_case != '1' && !chk_item(data, next_case))
+	data->next_case = data->map->map[data->pos_y][data->pos_x];
+	if (data->next_case != '1' && !chk_item(data, data->next_case))
 	{
-		if (next_case == 'E')
+		data->game->print_step = 0;
+		if (data->next_case == 'E')
 		{
 			if (data->map->item == 0)
 			{
@@ -145,4 +146,6 @@ void	render_right(t_data *data)
 			display_map(data->game, data->map);
 		}
 	}
+	else
+		data->game->print_step = 0;
 }

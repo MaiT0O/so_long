@@ -6,7 +6,7 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 13:21:26 by ebansse           #+#    #+#             */
-/*   Updated: 2025/01/13 18:27:58 by ebansse          ###   ########.fr       */
+/*   Updated: 2025/01/14 17:20:05 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct t_game
 	int		off_height;
 	void	*perso_img;
 	int		perso_step;
+	int		print_step;
 	int		perso_x;
 	int		perso_y;
 	int		marge_x;
@@ -72,6 +73,7 @@ typedef struct t_data
 {
 	int		pos_x;
 	int		pos_y;
+	char	next_case;
 	t_game	*game;
 	t_map	*map;
 	t_img	*img;

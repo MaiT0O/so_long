@@ -6,7 +6,7 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 13:59:46 by ebansse           #+#    #+#             */
-/*   Updated: 2025/01/14 16:44:02 by ebansse          ###   ########.fr       */
+/*   Updated: 2025/01/14 17:18:16 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	put_floor(t_data *data)
 {
 	data->game->perso_step++;
+	data->game->print_step = 1;
 	put_image(data->map->img_map, data->map->sprites_array[1],
 		data->game->perso_x, data->game->perso_y);
 }
@@ -80,24 +81,14 @@ int	move(int keycode, t_data *data)
 	if (!data || !data->game)
 		return (0);
 	else if ((keycode == 119 || keycode == 65362))
-	{
 		render_top(data);
-		ft_printf("Steps: %i\n", data->game->perso_step);
-	}
 	else if ((keycode == 115 || keycode == 65364))
-	{
 		render_bottom(data);
-		ft_printf("Steps: %i\n", data->game->perso_step);
-	}
 	else if ((keycode == 97 || keycode == 65361))
-	{
 		render_left(data);
-		ft_printf("Steps: %i\n", data->game->perso_step);
-	}
 	else if ((keycode == 100 || keycode == 65363))
-	{
 		render_right(data);
+	if (data->game->print_step == 1)
 		ft_printf("Steps: %i\n", data->game->perso_step);
-	}
 	return (1);
 }
