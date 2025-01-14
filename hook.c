@@ -6,7 +6,7 @@
 /*   By: ebansse <ebansse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 13:59:46 by ebansse           #+#    #+#             */
-/*   Updated: 2025/01/13 17:34:31 by ebansse          ###   ########.fr       */
+/*   Updated: 2025/01/14 16:44:02 by ebansse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	move(int keycode, t_data *data)
 {
 	if (!data || !data->game)
 		return (0);
-	else if ((keycode == 122 || keycode == 65362))
+	else if ((keycode == 119 || keycode == 65362))
 	{
 		render_top(data);
 		ft_printf("Steps: %i\n", data->game->perso_step);
@@ -89,7 +89,7 @@ int	move(int keycode, t_data *data)
 		render_bottom(data);
 		ft_printf("Steps: %i\n", data->game->perso_step);
 	}
-	else if ((keycode == 113 || keycode == 65361))
+	else if ((keycode == 97 || keycode == 65361))
 	{
 		render_left(data);
 		ft_printf("Steps: %i\n", data->game->perso_step);
