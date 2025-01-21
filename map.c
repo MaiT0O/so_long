@@ -78,7 +78,7 @@ void	letter_number_check(t_map *map, int i, int j)
 	while (i < map->line_map && map->map[i] != NULL)
 	{
 		j = 0;
-		while (j < (int)map->cols - 2)
+		while (j < (int)map->cols - 1)
 		{
 			if (map->map[i][j] == 'P')
 			{
@@ -109,8 +109,6 @@ int	rectangle_check(t_map *map)
 
 	j = 0;
 	if (map->line_map < 3)
-		return (0);
-	if (map->line_map == (int)map->cols - 1)
 		return (0);
 	while (j < map->line_map)
 	{
